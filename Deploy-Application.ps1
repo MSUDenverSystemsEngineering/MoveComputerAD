@@ -119,6 +119,51 @@ Try {
 		
 		## <Perform Pre-Installation tasks here>
 		
+		$msil = Get-ChildItem $dirFiles\32-Bit | where { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*msil_microsoft-windows-d..ivecenter.resources*" }
+		$madm = Get-ChildItem $dirFiles\32-Bit | where { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*x86_microsoft.activedirectory.management*" }  
+		$madm64 = Get-ChildItem $dirFiles\64-Bit | where { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*amd64_microsoft.activedir..anagement.resources*" }
+		
+		If (-not (Test-Path $envWinDir\System32\WindowsPowerShell\v1.0\Modules\ActiveDirectory)) {
+			Copy-File -Path "$dirFiles\32-Bit\ActiveDirectory" -Destination "$envWinDir\System32\WindowsPowerShell\v1.0\Modules" -Recurse
+		}
+		
+		If (-not (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_32\Microsoft.ActiveDirectory.Management)) {
+			Copy-File -Path "$dirFiles\32-Bit\Microsoft.ActiveDirectory.Management" -Destination "$envWinDir\Microsoft.NET\assembly\GAC_32" -Recurse
+		}
+		
+		If (-not (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_32\Microsoft.ActiveDirectory.Management.Resources)) {
+			Copy-File -Path "$dirFiles\32-Bit\Microsoft.ActiveDirectory.Management.Resources" -Destination "$envWinDir\Microsoft.NET\assembly\GAC_32" -Recurse
+		}
+		
+		If (-not (Test-Path $envWinDir\WinSxS\$msil)) {
+			Copy-File -Path "$dirFiles\32-Bit\$msil" -Destination "$envWinDir\WinSxS" -Recurse
+		}
+		
+		If (-not (Test-Path $envWinDir\WinSxS\$madm)) {
+			Copy-File -Path "$dirFiles\32-Bit\$madm" -Destination "$envWinDir\WinSxS" -Recurse
+		}
+		
+		
+		If ($envOSArchitecture -eq "64-Bit") {
+		
+			If (-not (Test-Path $envWinDir\SysWOW64\WindowsPowerShell\v1.0\Modules\ActiveDirectory)) {
+				Copy-File -Path "$dirFiles\64-Bit\ActiveDirectory" -Destination "$envWinDir\SysWOW64\WindowsPowerShell\v1.0\Modules" -Recurse
+			}
+		
+			If (-not (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_64\Microsoft.ActiveDirectory.Management)) {
+				Copy-File -Path "$dirFiles\64-Bit\Microsoft.ActiveDirectory.Management" -Destination "$envWinDir\Microsoft.NET\assembly\GAC_64" -Recurse
+			}
+		
+			If (-not (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_64\Microsoft.ActiveDirectory.Management.Resources)) {
+				Copy-File -Path "$dirFiles\64-Bit\Microsoft.ActiveDirectory.Management.Resources" -Destination "$envWinDir\Microsoft.NET\assembly\GAC_64" -Recurse
+			}
+			
+			If (-not (Test-Path $envWinDir\WinSxS\$madm64)) {
+				Copy-File -Path "$dirFiles\64-Bit\$madm64" -Destination "$envWinDir\WinSxS" -Recurse
+			}
+		
+		}
+		
 		
 		##*===============================================
 		##* INSTALLATION 
@@ -173,7 +218,46 @@ Try {
 		
 		# <Perform Uninstallation tasks here>
 		
+		If (Test-Path $envWinDir\System32\WindowsPowerShell\v1.0\Modules\ActiveDirectory) {
+			Remove-Folder -Path "$envWinDir\System32\WindowsPowerShell\v1.0\Modules\ActiveDirectory"
+		}
 		
+		If (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_32\Microsoft.ActiveDirectory.Management) {
+			Remove-Folder -Path "$envWinDir\Microsoft.NET\assembly\GAC_32\Microsoft.ActiveDirectory.Management"
+		}
+		
+		If (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_32\Microsoft.ActiveDirectory.Management.Resources) {
+			Remove-Folder -Path "$envWinDir\Microsoft.NET\assembly\GAC_32\Microsoft.ActiveDirectory.Management.Resources"
+		}
+		
+		If (Test-Path $envWinDir\WinSxS\$msil) {
+			Remove-Folder -Path "$envWinDir\WinSxS\$msil"
+		}
+		
+		If (Test-Path $envWinDir\WinSxS\$madm) {
+			Remove-Folder -Path "$envWinDir\WinSxS\$madm"
+		}
+		
+		
+		If ($envOSArchitecture -eq "64-Bit") {
+		
+			If (Test-Path $envWinDir\SysWOW64\WindowsPowerShell\v1.0\Modules\ActiveDirectory) {
+				Remove-Folder -Path "$envWinDir\SysWOW64\WindowsPowerShell\v1.0\Modules\ActiveDirectory"
+			}
+		
+			If (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_64\Microsoft.ActiveDirectory.Management) {
+				Remove-Folder -Path "$envWinDir\Microsoft.NET\assembly\GAC_64\Microsoft.ActiveDirectory.Management"
+			}
+		
+			If (Test-Path $envWinDir\Microsoft.NET\assembly\GAC_64\Microsoft.ActiveDirectory.Management.Resources) {
+				Remove-Folder -Path "$envWinDir\Microsoft.NET\assembly\GAC_64\Microsoft.ActiveDirectory.Management.Resources"
+			}
+			
+			If (Test-Path $envWinDir\WinSxS\$madm64) {
+				Remove-Folder -Path "$envWinDir\WinSxS\$madm64"
+			}
+		
+		}	
 		##*===============================================
 		##* POST-UNINSTALLATION
 		##*===============================================
