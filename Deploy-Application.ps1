@@ -119,9 +119,9 @@ Try {
 
 		## <Perform Pre-Installation tasks here>
 
-		$msil = Get-ChildItem $dirFiles\32-Bit | where { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*msil_microsoft-windows-d..ivecenter.resources*" }
-		$madm = Get-ChildItem $dirFiles\32-Bit | where { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*x86_microsoft.activedirectory.management*" }
-		$madm64 = Get-ChildItem $dirFiles\64-Bit | where { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*amd64_microsoft.activedir..anagement.resources*" }
+		$msil = Get-ChildItem $dirFiles\32-Bit | Where-Object { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*msil_microsoft-windows-d..ivecenter.resources*" }
+		$madm = Get-ChildItem $dirFiles\32-Bit | Where-Object { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*x86_microsoft.activedirectory.management*" }
+		$madm64 = Get-ChildItem $dirFiles\64-Bit | Where-Object { $_.Attributes -eq 'Directory' } | Where-Object { $_.FullName -like "*amd64_microsoft.activedir..anagement.resources*" }
 
 		If (-not (Test-Path $envWinDir\System32\WindowsPowerShell\v1.0\Modules\ActiveDirectory)) {
 			Copy-File -Path "$dirFiles\32-Bit\ActiveDirectory" -Destination "$envWinDir\System32\WindowsPowerShell\v1.0\Modules" -Recurse
